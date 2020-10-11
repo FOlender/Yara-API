@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install python3 python3-p
 RUN pip3 install flask flask-restful yara-python memory_profiler
 
 # Copio API.
-RUN mkdir /Yara-API/ && mkdir /Yara-API/Rules mkdir /Yara-API/Rules/Compiled && mkdir /Yara-API/Files
+RUN mkdir /Yara-API/ && mkdir /Yara-API/Rules && mkdir /Yara-API/Rules/Compiled && mkdir /Yara-API/Files
 COPY --chown=root:root Yara-API.py /Yara-API/Yara-API.py
 RUN chmod 755 /Yara-API/Yara-API.py
 
