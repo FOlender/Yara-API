@@ -6,21 +6,44 @@
 
 1.  Install [Git](https://git-scm.com/downloads)
 2.  Install [Docker](https://www.docker.io/).
-3.  Pull from GitHUb Repo
+3.  Pull from Github Repo:
+```
+mkdir Yara-API && cd Yara-API/ && git init && git pull https://github.com/FOlender/Yara-API.git
+```
 4.  Run Dockerfile:
 ```
 sudo docker build . -t yara-api:v1
 ```
 5. Execute container:
 ``` 
-docker run --rm -d --name Yara-APIv1 -p 8080:8080 yara-api:v1 bash -c "python3 /Yara-API/Yara-API.py"
+sudo docker run --rm -d --name Yara-APIv1 -p 8080:8080 yara-api:v1 bash -c "python3 /Yara-API/Yara-API.py"
 ```
 
 ## Maintenance
 
 If the container was runned with the "-rm" argument as indicated in step 5 of the installation process, the container will be remove when stoped, so it is highly recommended to generate new images from the running container once in a while to backup the new rules added to it:
 ```
-# docker commit Yara-API yara-api:v2
+# sudo docker commit Yara-API yara-api:v2
+```
+
+## How to get the code and modify it youself
+
+1.  Create local directory and initiate git
+```
+mkdir Yara-API && cd Yara-API/ && git init
+```
+2.  Pull Repo from Github:
+```
+git pull https://github.com/FOlender/Yara-API.git
+```
+3. Do whatever you want with the code.
+4.  Commit changes and Push to Github:
+```
+git add .
+git commit -m 'Message'
+git remote add origin https://github.com/FOlender/Yara-API.git
+git branch -m master main
+git push -u origin main
 ```
 
 ## TODO
