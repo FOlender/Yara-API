@@ -26,7 +26,9 @@ If the container was runned with the "-rm" argument as indicated in step 5 of th
 # sudo docker commit Yara-API yara-api:v2
 ```
 
-## How to get the code and modify it youself
+## DIY
+
+#### Get the code from GitHub and Modify it...
 
 1.  Create local directory and initiate git
 ```
@@ -46,6 +48,14 @@ git branch -m master main
 git push -u origin main
 ```
 
+#### Get into the running container to see under the hood...
+
+
+```
+sudo docker exec -i -t Yara-APIv1 /bin/bash
+```
+
+
 ## TODO
 
 - [x] Implement GET/PUT on /api/rule
@@ -60,9 +70,6 @@ Bugs? Missing features? Errors in the documentation? [Let me know](https://githu
 
 - "Es importante que como esta API va a tener bastante trafico, no tenga que cargar las reglas cada vez que tenga que hacer un análisis."
 > Al momento de crear una regla de YARA la misma se almacena en un archivo crudo separado y se compila en un archivo especifico por regla, a fin de poder cumplir la necesidad de matchear texto/archivos contra reglas especificas. Esto genera que cada regla compilada deba cargarse por separado al momento de cada comparacion. La alternativa que consideraba seria recompilarlas todas en un mismo archivo, pero luego en los matcheos no tendria la flexibilidad de seleccionar contra que regla matchear cada texto/archivo.
-
-- "Sumar al POST, un PUT y GET ..."
-> Sume PUT y GET  sobre las mismas funcionalidades que se pedian, es decir que por ejemplo puedo hacer un GET o un PUT para crear una regla de YARA. La alternativa que consideraba era utilizar cada metodo HTTP como originalmente fue concebido, por ejemplo GET que sea para obtener datos (ver una regla), POST para crear datos (crear una regla) y PUT para crear/reemplazar datos (Crear/Sobreescribir una regla).
 
 - **Analyze text POST**: Correccion de comillas (“ y ” por ") en CURL de ejemplo brindado en su Repo:
 ```
@@ -81,15 +88,3 @@ curl --request POST \
 	]
 }'
 ```
-
-- ADD RULE con GET/PUT:
-```
-http://localhost:8080/api/rule?name=esto%20no%20es%20coca%20papi%20rule&rule=rule%20EstoNoEsCocaPapiRule{%20strings:%20$my_text_string%20=%20%22esto%20no%20es%20coca%20papi%22%20condition:%20$my_text_string}
-```
-
-- Posibles ANALYZE TEXT con GET/PUT (Pendientes, ver TODO):
-```
-SIN [] en parametro rules: http://localhost:8080/api/analyze/text?text=esto%20es%20un%20texto%20a%20analizar&rules=%7B%22rule_id%22%3A%201%7D%2C%7B%22rule_id%22%3A%202%7D
-CON [] en parametro rules: http://localhost:8080/api/analyze/text?text=esto%20es%20un%20texto%20a%20analizar&rules=%5B%7B%22rule_id%22%3A%201%7D%2C%7B%22rule_id%22%3A%202%7D%5D
-```
-

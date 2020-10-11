@@ -13,17 +13,12 @@ app.config.update(
 )
 
 # Add Rule
-@app.route('/api/rule', methods=['POST','GET', 'PUT'])
+@app.route('/api/rule', methods=['POST'])
 def apirule():
 	if not request.is_json: return "Content Type no es JSON", 400
-	if request.method == 'POST': 
-		content = request.get_json() # Rechaza JSON no valido (code 400).
-		name = content['name']
-		rule = content['rule']
-	if request.method == 'GET' or request.method == 'PUT': 
-		name = request.args.get('name')
-		rule = request.args.get('rule')
-		content = { "name": name, "rule": rule}
+	content = request.get_json() # Rechaza JSON no valido (code 400).
+	name = content['name']
+	rule = content['rule']
 	# Verifico que haya enviado nombre y regla
 	if name == '' or not name: return "Nombre de regla no especificado", 400
 	# TODO: Verificar con MD5SUM que no exista una regla compilada identica.
@@ -40,7 +35,7 @@ def apirule():
 		return "Regla de YARA mal formada", 400
 	# Guardo Regla de Yara compilada en un archivo
 	YaraRules.save('Rules/Compiled/'+str(i)+'-Compiled')
-	# TODO: Verificar si podria re-cargar todas las reglas compiladas en un archivo y luego hacer match selectivo.
+	# TODO: Verificar si podria re-cargar todas las reglas compiladas en un archivo junto a esta y luego hacer match selectivo en los otros endpoints.
 	content["id"] = i
 	return jsonify(content), 201
 
@@ -48,23 +43,9 @@ def apirule():
 @app.route('/api/analyze/text', methods=['POST'])
 def apianalyzetext():
 	if not request.is_json: return "Content Type no es JSON", 400
-	if request.method == 'POST':
-		content = request.get_json() # Rechaza JSON no valido (code 400).
-		text = content['text']
-		rules = content['rules']
-		#print (str(type(rules))) #LISTA DE DICCIONARIOS
-		#print (str(rules)) # [{'rule_id': 1}, {'rule_id': 2}]
-	if request.method == 'GET' or request.method == 'PUT': 
-		text = request.args.get('text')
-		rules = request.args.get('rules')
-		#print (str(type(rules))) #STR
-		print (str(rules)) # [{"rule_id": 1},{"rule_id": 2}]
-		# TODO: Convertir STR a Lista de Diccionarios (o a JSON) para poder continuar trabajandolo con el mismo codigo en GET y PUT.
-		#import json
-		#res = [json.loads(idx.replace('"', "'")) for idx in rules] 
-		#res = list(eval(rules))
-		#print (str(type(res))) 
-		#content = { "text": text, "rules": rules}
+	content = request.get_json() # Rechaza JSON no valido (code 400).
+	text = content['text']
+	rules = content['rules']
 	# Verifico que haya enviado texto y reglas
 	if text == '' or not text: return "Texto no especificado", 400
 	if rules == '' or not rules: return "Reglas nos especificadas", 400
@@ -119,7 +100,7 @@ def apianalyzefile():
 	return jsonify(Body)
 
 if __name__ == '__main__':
-	# Cargar todas las reglas de Yara compiladas en memoria (intento con Yara Load):
+	# Intento de cargar todas las reglas de Yara compiladas en memoria de a una:
 	#for f in listdir("Rules/Compiled/"):
 	#	if isfile(join("Rules/Compiled/", f)):
 	#		YaraRule = yara.load('Rules/Compiled/'+f)
