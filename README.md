@@ -55,11 +55,8 @@ git push -u origin main
 sudo docker exec -i -t Yara-APIv1 /bin/bash
 ```
 
-
 ## TODO
 
-- [x] Implement GET/PUT on /api/rule
-- [] Implement GET/PUT on /api/analyze/text and /api/analyze/File 
 - [] Replace base image ubuntu:stable with alpine:stable
 
 ## Issues
